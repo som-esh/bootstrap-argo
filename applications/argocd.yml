@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-applications
+  name: argocd-config
   namespace: argocd
 spec:
   project: default
@@ -9,9 +9,7 @@ spec:
   source:
     repoURL: https://github.com/som-esh/bootstrap-argo
     targetRevision: master
-    path: applications
-    directory:
-      recurse: true
+    path: argocd
 
   destination:
     server: https://kubernetes.default.svc

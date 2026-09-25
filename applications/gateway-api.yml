@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root-applications
+  name: gateway-api
   namespace: argocd
 spec:
   project: default
@@ -9,9 +9,7 @@ spec:
   source:
     repoURL: https://github.com/som-esh/bootstrap-argo
     targetRevision: master
-    path: applications
-    directory:
-      recurse: true
+    path: infrastructure/gateway-api
 
   destination:
     server: https://kubernetes.default.svc
