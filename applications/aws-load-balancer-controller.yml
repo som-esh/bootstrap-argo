@@ -22,7 +22,7 @@ spec:
           featureGates:
             ALBGatewayAPI: true
         serviceAccount:
-          create: false
+          create: true
           name: aws-load-balancer-controller
 
   destination:
