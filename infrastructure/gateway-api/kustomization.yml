@@ -4,3 +4,6 @@ kind: Kustomization
 resources:
   - gatewayclass.yml
   - gateway.yml
+  - argocd-httproute.yml
+  - argocd-targetgroupconfiguration.yml
+  - https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v3.5.0/config/crd/gateway/gateway-crds.yaml

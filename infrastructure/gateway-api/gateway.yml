@@ -3,8 +3,6 @@ kind: Gateway
 metadata:
   name: public-gateway
   namespace: argocd
-  annotations:
-    alb.ingress.kubernetes.io/target-type: ip
 spec:
   gatewayClassName: aws-alb
 
