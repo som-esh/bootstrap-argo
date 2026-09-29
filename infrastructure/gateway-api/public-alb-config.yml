@@ -1,0 +1,7 @@
+apiVersion: gateway.k8s.aws/v1
+kind: LoadBalancerConfiguration
+metadata:
+  name: public-alb-config
+  namespace: argocd
+spec:
+  scheme: internet-facing

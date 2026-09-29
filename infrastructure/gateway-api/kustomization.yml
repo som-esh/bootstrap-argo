@@ -6,4 +6,5 @@ resources:
   - gateway.yml
   - argocd-httproute.yml
   - argocd-targetgroupconfiguration.yml
+  - public-alb-config.yml
   - https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v3.5.0/config/crd/gateway/gateway-crds.yaml

@@ -5,6 +5,11 @@ metadata:
   namespace: argocd
 spec:
   gatewayClassName: aws-alb
+  infrastructure:
+    parametersRef:
+      group: gateway.k8s.aws
+      kind: LoadBalancerConfiguration
+      name: public-alb-config
 
   listeners:
     - name: http

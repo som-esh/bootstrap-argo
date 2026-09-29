@@ -8,3 +8,6 @@ spec:
     name: argocd-server
   defaultConfiguration:
     targetType: ip
+    protocol: HTTPS
+    healthCheckConfig:
+      healthCheckProtocol: HTTPS
