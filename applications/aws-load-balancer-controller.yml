@@ -5,6 +5,22 @@ metadata:
   namespace: argocd
 spec:
   project: default
+  ignoreDifferences:
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      name: aws-load-balancer-webhook
+      jqPathExpressions:
+        - .webhooks[]?.clientConfig.caBundle
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: aws-load-balancer-webhook
+      jqPathExpressions:
+        - .webhooks[]?.clientConfig.caBundle
+    - kind: Secret
+      name: aws-load-balancer-tls
+      namespace: kube-system
+      jsonPointers:
+        - /data
 
   source:
     repoURL: https://aws.github.io/eks-charts
@@ -30,6 +46,8 @@ spec:
     namespace: kube-system
 
   syncPolicy:
+    syncOptions:
+      - RespectIgnoreDifferences=true
     automated:
       prune: true
       selfHeal: true
