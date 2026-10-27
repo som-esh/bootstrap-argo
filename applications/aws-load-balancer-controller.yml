@@ -3,51 +3,63 @@ kind: Application
 metadata:
   name: aws-load-balancer-controller
   namespace: argocd
+  annotations:
+  argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
-  # ignoreDifferences:
-  #   - group: admissionregistration.k8s.io
-  #     kind: MutatingWebhookConfiguration
-  #     name: aws-load-balancer-webhook
-  #     jqPathExpressions:
-  #       - .webhooks[]?.clientConfig.caBundle
-  #   - group: admissionregistration.k8s.io
-  #     kind: ValidatingWebhookConfiguration
-  #     name: aws-load-balancer-webhook
-  #     jqPathExpressions:
-  #       - .webhooks[]?.clientConfig.caBundle
-  #   - kind: Secret
-  #     name: aws-load-balancer-tls
-  #     namespace: kube-system
-  #     jsonPointers:
-  #       - /data
 
   source:
     repoURL: https://aws.github.io/eks-charts
     chart: aws-load-balancer-controller
     targetRevision: 3.5.0
     helm:
+    valuesObject:
+      enableCertManager: true
       releaseName: aws-load-balancer-controller
-      values: |
+      valuesObject:
         clusterName: dev-eks
         region: us-west-1
-        replicaCount: 2
-        image:
-          tag: v3.5.0
+        replicaCount: 1
+        enableCertManager: true
         controllerConfig:
           featureGates:
             ALBGatewayAPI: true
         serviceAccount:
           create: true
           name: aws-load-balancer-controller
+      # values: |
+      #   clusterName: dev-eks
+      #   region: us-west-1
+      #   replicaCount: 2
+      #   image:
+      #     tag: v3.5.0
+      #   controllerConfig:
+      #     featureGates:
+      #       ALBGatewayAPI: true
+      #   serviceAccount:
+      #     create: true
+      #     name: aws-load-balancer-controller
 
   destination:
     server: https://kubernetes.default.svc
     namespace: kube-system
+  ignoreDifferences:
+    # cert-manager's CA injector owns these fields
+    - group: admissionregistration.k8s.io
+      kind: MutatingWebhookConfiguration
+      name: aws-load-balancer-webhook
+      jqPathExpressions:
+        - .webhooks[]?.clientConfig.caBundle
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: aws-load-balancer-webhook
+      jqPathExpressions:
+        - .webhooks[]?.clientConfig.caBundle
 
   syncPolicy:
     syncOptions:
       - RespectIgnoreDifferences=true
+      - SkipDryRunOnMissingResource=true
     automated:
       prune: true
       selfHeal: true
